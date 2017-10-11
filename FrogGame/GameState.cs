@@ -58,10 +58,12 @@ namespace FrogGame
 
         public bool IsFinal()
         {
-            bool leftSideIsFullWithRightFrogs = State.Take(n)
+            bool leftSideIsFullWithRightFrogs = State
+                .Take(n)
                 .All(c => c == RightFrogIndicator);
 
-            bool rightSideIsFullWithLeftFrogs = State.Skip(n + 1)
+            bool rightSideIsFullWithLeftFrogs = State
+                .Skip(n + 1)
                 .Take(n)
                 .All(c => c == LeftFrogIndicator);
 
