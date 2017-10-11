@@ -7,7 +7,6 @@ namespace FrogGame
     internal class StateBuilder
     {
         private int n;
-
         private Stack<GameState> states;
         private HashSet<GameState> visited;
         private Dictionary<GameState, List<GameState>> neighbours;
@@ -35,11 +34,15 @@ namespace FrogGame
 
             if(neighbour != null)
             {
+                this.states.Push(neighbour);
+                this.visited.Add(neighbour);
+
                 return neighbour;
             }
             else
             {
                 states.Pop();
+
                 return Next();
             }
         }
