@@ -29,6 +29,11 @@ namespace FrogGame
 
         public GameState Next()
         {
+            if(states.Count == 0)
+            {
+                throw new Exception("States stack contains no elements, game cannot continue!");
+            }
+
             GameState lastState = states.Peek();
             GameState neighbour = NotVisitedNeighbour(lastState);
 
