@@ -33,6 +33,7 @@ namespace FrogGame
         public GameState(char[] state)
         {
             State = state;
+            this.n = (state.Length - 1) / 2;
         }
 
         public char[] State
