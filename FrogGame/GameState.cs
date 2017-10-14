@@ -16,7 +16,7 @@ namespace FrogGame
             State = new Frog[frogSize];
 
             InitializeRightFrogs();
-            InitializeMiffle();
+            InitializeMiddle();
             InitializeLeftFrogs(frogSize);
         }
 
@@ -82,7 +82,7 @@ namespace FrogGame
             return this.ToString() == other.ToString();
         }
 
-        private void InitializeMiffle()
+        private void InitializeMiddle()
         {
             State[n] = Frog.Empty();
         }
