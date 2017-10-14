@@ -11,20 +11,10 @@ namespace FrogGame
         public GameState(int n)
         {
             this.n = n;
-            int frogSize = 2 * n + 1;
-            State = new Frog[frogSize];
 
-            for (int i = 0; i < n; i++)
-            {
-                State[i] = Frog.Right();
-            }
-
-            State[n] = Frog.Empty();
-
-            for (int i = n + 1; i < frogSize; i++)
-            {
-                State[i] = Frog.Left();
-            }
+            InitializeRightFrogs();
+            InitializeMiffle();
+            InitializeLeftFrogs();
         }
 
         public GameState(Frog[] state)
@@ -87,6 +77,30 @@ namespace FrogGame
         public bool Equals(GameState other)
         {
             return this.ToString() == other.ToString();
+        }
+
+        private void InitializeMiffle()
+        {
+            State[n] = Frog.Empty();
+        }
+
+        private void InitializeLeftFrogs()
+        {
+            int frogSize = 2 * n + 1;
+            State = new Frog[frogSize];
+
+            for (int i = n + 1; i < frogSize; i++)
+            {
+                State[i] = Frog.Left();
+            }
+        }
+
+        private void InitializeRightFrogs()
+        {
+            for (int i = 0; i < n; i++)
+            {
+                State[i] = Frog.Right();
+            }
         }
     }
 }
