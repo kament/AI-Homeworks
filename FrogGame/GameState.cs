@@ -43,7 +43,7 @@ namespace FrogGame
                     throw new ArgumentNullException(nameof(State));
                 }
 
-                int n = state.Length - 1;
+                int n = value.Length - 1;
                 if (n % 2 != 0)
                 {
                     throw new ArgumentException($"{nameof(state)} is with invalid length! {n}");
@@ -57,12 +57,12 @@ namespace FrogGame
         {
             bool leftSideIsFullWithRightFrogs = State
                 .Take(n)
-                .All(f => f.IsLeft());
+                .All(f => f.IsRight());
 
             bool rightSideIsFullWithLeftFrogs = State
                 .Skip(n + 1)
                 .Take(n)
-                .All(f => f.IsRight());
+                .All(f => f.IsLeft());
 
             bool isFinal = leftSideIsFullWithRightFrogs && rightSideIsFullWithLeftFrogs;
 
