@@ -5,38 +5,35 @@ namespace FrogGame
 {
     internal class GameState
     {
-        public const char LeftFrogIndicator = '>';
-        public const char RightFrogIndicator = '<';
-
         private int n;
-        private char[] state;
+        private Frog[] state;
 
         public GameState(int n)
         {
             this.n = n;
             int frogSize = 2 * n + 1;
-            State = new char[frogSize];
+            State = new Frog[frogSize];
 
             for (int i = 0; i < n; i++)
             {
-                State[i] = LeftFrogIndicator;
+                State[i] = Frog.Left();
             }
 
-            State[n] = ' ';
+            State[n] = Frog.Empty();
 
             for (int i = n + 1; i < frogSize; i++)
             {
-                State[i] = RightFrogIndicator;
+                State[i] = Frog.Right();
             }
         }
 
-        public GameState(char[] state)
+        public GameState(Frog[] state)
         {
             State = state;
             this.n = (state.Length - 1) / 2;
         }
 
-        public char[] State
+        public Frog[] State
         {
             get { return this.state; }
             set
@@ -60,21 +57,26 @@ namespace FrogGame
         {
             bool leftSideIsFullWithRightFrogs = State
                 .Take(n)
-                .All(c => c == RightFrogIndicator);
+                .All(f => f.IsLeft());
 
             bool rightSideIsFullWithLeftFrogs = State
                 .Skip(n + 1)
                 .Take(n)
-                .All(c => c == LeftFrogIndicator);
+                .All(f => f.IsRight());
 
             bool isFinal = leftSideIsFullWithRightFrogs && rightSideIsFullWithLeftFrogs;
 
             return isFinal;
         }
 
+        public GameState Clone()
+        {
+            return new GameState(this.state);
+        }
+
         public override string ToString()
         {
-            return string.Join(string.Empty, State);
+            return string.Join(string.Empty, State.Select(f => f.ToString()));
         }
     }
 }

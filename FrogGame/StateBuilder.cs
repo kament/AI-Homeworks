@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace FrogGame
 {
@@ -9,7 +8,6 @@ namespace FrogGame
         private int n;
         private Stack<GameState> states;
         private HashSet<GameState> visited;
-        private Dictionary<GameState, List<GameState>> neighbours;
 
         public StateBuilder(int n)
         {
@@ -29,7 +27,7 @@ namespace FrogGame
 
         public GameState Next()
         {
-            if(states.Count == 0)
+            if (states.Count == 0)
             {
                 throw new Exception("States stack contains no elements, game cannot continue!");
             }
@@ -37,7 +35,7 @@ namespace FrogGame
             GameState lastState = states.Peek();
             GameState neighbour = NotVisitedNeighbour(lastState);
 
-            if(neighbour != null)
+            if (neighbour != null)
             {
                 this.states.Push(neighbour);
                 this.visited.Add(neighbour);
@@ -54,18 +52,89 @@ namespace FrogGame
 
         private GameState NotVisitedNeighbour(GameState lastState)
         {
-            if (!neighbours.ContainsKey(lastState))
+            GameState neighbour = GenerateNeighbour(lastState);
+            if (neighbour == null)
             {
-                List<GameState> neighbours = GenerateNeighbours(lastState);
-                this.neighbours.Add(lastState, neighbours);
+                return GenerateNeighbour(lastState);
             }
-
-            return neighbours[lastState].FirstOrDefault(x => !visited.Contains(x));
+            else if (!visited.Contains(neighbour))
+            {
+                return neighbour;
+            }
+            else
+            {
+                return null;
+            }
         }
 
-        private List<GameState> GenerateNeighbours(GameState lastState)
+        private GameState GenerateNeighbour(GameState lastState)
         {
-            throw new NotImplementedException();
+            if (!lastState.IsFinal())
+            {
+                for (int i = 0; i < lastState.State.Length; i++)
+                {
+                    if (DirectLeftMovePossible(i, lastState.State))
+                    {
+                        var newState = lastState.Clone();
+                        newState.State[i + 1] = newState.State[i];
+                        newState.State[i] = Frog.Empty();
+
+                        return newState;
+                    }
+                    else if (JumpLeftMovePossible(i, lastState.State))
+                    {
+                        var newState = lastState.Clone();
+                        var temp = newState.State[i + 2];
+                        newState.State[i + 2] = newState.State[i];
+                        newState.State[i] = Frog.Empty();
+
+                        return newState;
+                    }
+                    else if (DerectRightMovePossible(i, lastState.State))
+                    {
+                        var newState = lastState.Clone();
+                        newState.State[i - 1] = newState.State[i];
+                        newState.State[i] = Frog.Empty();
+
+                        return newState;
+                    }
+                    else if (JumnRightMovePossible(i, lastState.State))
+                    {
+                        var newState = lastState.Clone();
+                        var temp = newState.State[i - 2];
+                        newState.State[i - 2] = newState.State[i];
+                        newState.State[i] = Frog.Empty();
+
+                        return newState;
+                    }
+                }
+
+                return null;
+            }
+            else
+            {
+                throw new Exception("Cannot get neighbour for final node!");
+            }
+        }
+
+        private bool JumnRightMovePossible(int index, Frog[] state)
+        {
+            return state.Length - index > 2 && state[index + 1].IsEmpty();
+        }
+
+        private bool DerectRightMovePossible(int index, Frog[] state)
+        {
+            return state.Length - index > 3 && state[index + 2].IsEmpty();
+        }
+
+        private bool JumpLeftMovePossible(int index, Frog[] state)
+        {
+            return index > 0 && state[index - 1].IsEmpty();
+        }
+
+        private bool DirectLeftMovePossible(int index, Frog[] state)
+        {
+            return index > 1 && state[index - 2].IsEmpty();
         }
     }
 }
