@@ -5,6 +5,15 @@ namespace FrogGame
 {
     internal class StateBuilder
     {
+        private const int RightJumpMinEdgePositionsDiff = 2;
+        private const int DirectRightMoveMinEdgePositionsDiff = 1;
+        private const int LeftJumpMinEdgePosition = 1;
+        private const int DirectLeftMoveMinEdgePosition = 0;
+        private const int DirectRightMovePosition = 1;
+        private const int JumpRightMovePosition = 2;
+        private const int DirectLeftMovePosition = -1;
+        private const int JumpLeftMovePosition = -2;
+
         private int n;
         private Stack<GameState> states;
         private HashSet<GameState> visited;
@@ -35,7 +44,6 @@ namespace FrogGame
 
             GameState lastState = states.Peek();
             GameState neighbour = NotVisitedNeighbour(lastState);
-
             if (neighbour != null)
             {
                 this.states.Push(neighbour);
@@ -70,92 +78,73 @@ namespace FrogGame
 
         private GameState GenerateNeighbour(GameState lastState)
         {
-            if (!lastState.IsFinal())
-            {
-                for (int i = 0; i < lastState.State.Length; i++)
-                {
-                    if (DerectRightMovePossible(i, lastState.State))
-                    {
-                        var newState = lastState.Clone();
-                        newState.State[i + 1] = newState.State[i];
-                        newState.State[i] = Frog.Empty();
-
-                        if (visited.Contains(newState))
-                        {
-                            continue;
-                        }
-
-                        return newState;
-                    }
-                    else if (JumnRightMovePossible(i, lastState.State))
-                    {
-                        var newState = lastState.Clone();
-                        var temp = newState.State[i + 2];
-                        newState.State[i + 2] = newState.State[i];
-                        newState.State[i] = Frog.Empty();
-
-                        if (visited.Contains(newState))
-                        {
-                            continue;
-                        }
-
-                        return newState;
-                    }
-                    else if (DirectLeftMovePossible(i, lastState.State))
-                    {
-                        var newState = lastState.Clone();
-                        newState.State[i - 1] = newState.State[i];
-                        newState.State[i] = Frog.Empty();
-
-                        if (visited.Contains(newState))
-                        {
-                            continue;
-                        }
-
-                        return newState;
-                    }
-                    else if (JumpLeftMovePossible(i, lastState.State))
-                    {
-                        var newState = lastState.Clone();
-                        var temp = newState.State[i - 2];
-                        newState.State[i - 2] = newState.State[i];
-                        newState.State[i] = Frog.Empty();
-
-                        if (visited.Contains(newState))
-                        {
-                            continue;
-                        }
-
-                        return newState;
-                    }
-                }
-
-                return null;
-            }
-            else
+            if (lastState.IsFinal())
             {
                 throw new Exception("Cannot get neighbour for final node!");
             }
+
+            for (int i = 0; i < lastState.State.Length; i++)
+            {
+                GameState newState = CreateNewState(lastState, i);
+                if (newState != null && !visited.Contains(newState))
+                {
+                    return newState;
+                }
+            }
+
+            return null;
+        }
+
+        private GameState CreateNewState(GameState lastState, int index)
+        {
+            if (DirectRightMovePossible(index, lastState.State))
+            {
+                return CreateNewStateFromLastState(lastState, index, DirectRightMovePosition);
+            }
+            else if (JumnRightMovePossible(index, lastState.State))
+            {
+                return CreateNewStateFromLastState(lastState, index, JumpRightMovePosition);
+            }
+            else if (DirectLeftMovePossible(index, lastState.State))
+            {
+                return CreateNewStateFromLastState(lastState, index, DirectLeftMovePosition);
+
+            }
+            else if (JumpLeftMovePossible(index, lastState.State))
+            {
+                return CreateNewStateFromLastState(lastState, index, JumpLeftMovePosition);
+            }
+
+            return null;
+        }
+
+        private static GameState CreateNewStateFromLastState(GameState lastState, int fromIndex, int positions)
+        {
+            var newState = lastState.Clone();
+            newState.State[fromIndex + positions] = newState.State[fromIndex];
+            newState.State[fromIndex] = Frog.Empty();
+
+            return newState;
         }
 
         private bool JumnRightMovePossible(int index, Frog[] state)
         {
-            return state[index].IsRight() && state.Length - index > 2 && state[index + 2].IsEmpty();
+            return state[index].IsRight() && state.Length - index > RightJumpMinEdgePositionsDiff && state[index + JumpRightMovePosition].IsEmpty();
         }
 
-        private bool DerectRightMovePossible(int index, Frog[] state)
+        private bool DirectRightMovePossible(int index, Frog[] state)
         {
-            return state[index].IsRight() && state.Length - index > 1 && state[index + 1].IsEmpty();
+            return state[index].IsRight() && state.Length - index > DirectRightMoveMinEdgePositionsDiff && state[index + DirectRightMovePosition].IsEmpty();
         }
 
         private bool JumpLeftMovePossible(int index, Frog[] state)
         {
-            return state[index].IsLeft() && index > 1 && state[index - 2].IsEmpty();
+            return state[index].IsLeft() && index > LeftJumpMinEdgePosition && state[index + JumpLeftMovePosition].IsEmpty();
         }
 
         private bool DirectLeftMovePossible(int index, Frog[] state)
         {
-            return state[index].IsLeft() && index > 0 && state[index - 1].IsEmpty();
+            return state[index].IsLeft() && index > DirectLeftMoveMinEdgePosition && state[index + DirectLeftMovePosition].IsEmpty();
         }
     }
 }
