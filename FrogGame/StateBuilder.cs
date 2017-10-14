@@ -56,7 +56,7 @@ namespace FrogGame
             GameState neighbour = GenerateNeighbour(lastState);
             if (neighbour == null)
             {
-                return GenerateNeighbour(lastState);
+                return null;
             }
             else if (!visited.Contains(neighbour))
             {
@@ -64,7 +64,7 @@ namespace FrogGame
             }
             else
             {
-                return null;
+                return NotVisitedNeighbour(lastState);
             }
         }
 

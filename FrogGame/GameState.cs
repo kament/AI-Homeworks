@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace FrogGame
 {
-    internal class GameState
+    internal class GameState : IEquatable<GameState>
     {
         private int n;
         private Frog[] state;
@@ -71,12 +71,22 @@ namespace FrogGame
 
         public GameState Clone()
         {
-            return new GameState(this.state);
+            return new GameState(this.state.Clone() as Frog[]);
         }
 
         public override string ToString()
         {
             return string.Join(string.Empty, State.Select(f => f.ToString()));
+        }
+
+        public override int GetHashCode()
+        {
+            return this.ToString().GetHashCode();
+        }
+
+        public bool Equals(GameState other)
+        {
+            return this.ToString() == other.ToString();
         }
     }
 }
