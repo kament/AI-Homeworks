@@ -16,14 +16,14 @@ namespace FrogGame
 
             for (int i = 0; i < n; i++)
             {
-                State[i] = Frog.Left();
+                State[i] = Frog.Right();
             }
 
             State[n] = Frog.Empty();
 
             for (int i = n + 1; i < frogSize; i++)
             {
-                State[i] = Frog.Right();
+                State[i] = Frog.Left();
             }
         }
 
@@ -55,16 +55,16 @@ namespace FrogGame
 
         public bool IsFinal()
         {
-            bool leftSideIsFullWithRightFrogs = State
-                .Take(n)
-                .All(f => f.IsRight());
-
-            bool rightSideIsFullWithLeftFrogs = State
-                .Skip(n + 1)
+            bool leftSideIsFullWithLeftFrogs = State
                 .Take(n)
                 .All(f => f.IsLeft());
 
-            bool isFinal = leftSideIsFullWithRightFrogs && rightSideIsFullWithLeftFrogs;
+            bool rightSideIsFullWithRightFrogs = State
+                .Skip(n + 1)
+                .Take(n)
+                .All(f => f.IsRight());
+
+            bool isFinal = leftSideIsFullWithLeftFrogs && rightSideIsFullWithRightFrogs;
 
             return isFinal;
         }

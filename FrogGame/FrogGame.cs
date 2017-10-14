@@ -23,7 +23,7 @@ namespace FrogGame
             while (!gameState.IsFinal())
             {
                 gameState = this.builder.Next();
-                states.Add(states.ToString());
+                states.Add(gameState.ToString());
             }
 
             return states;

@@ -80,6 +80,11 @@ namespace FrogGame
                         newState.State[i + 1] = newState.State[i];
                         newState.State[i] = Frog.Empty();
 
+                        if (visited.Contains(newState))
+                        {
+                            continue;
+                        }
+
                         return newState;
                     }
                     else if (JumnRightMovePossible(i, lastState.State))
@@ -89,6 +94,11 @@ namespace FrogGame
                         newState.State[i + 2] = newState.State[i];
                         newState.State[i] = Frog.Empty();
 
+                        if (visited.Contains(newState))
+                        {
+                            continue;
+                        }
+
                         return newState;
                     }
                     else if (DirectLeftMovePossible(i, lastState.State))
@@ -96,6 +106,11 @@ namespace FrogGame
                         var newState = lastState.Clone();
                         newState.State[i - 1] = newState.State[i];
                         newState.State[i] = Frog.Empty();
+
+                        if (visited.Contains(newState))
+                        {
+                            continue;
+                        }
 
                         return newState;
                     }
@@ -105,6 +120,11 @@ namespace FrogGame
                         var temp = newState.State[i - 2];
                         newState.State[i - 2] = newState.State[i];
                         newState.State[i] = Frog.Empty();
+
+                        if (visited.Contains(newState))
+                        {
+                            continue;
+                        }
 
                         return newState;
                     }
@@ -120,22 +140,22 @@ namespace FrogGame
 
         private bool JumnRightMovePossible(int index, Frog[] state)
         {
-            return state[index].IsLeft() && state.Length - index > 3 && state[index + 2].IsEmpty();
+            return state[index].IsRight() && state.Length - index > 2 && state[index + 2].IsEmpty();
         }
 
         private bool DerectRightMovePossible(int index, Frog[] state)
         {
-            return state[index].IsLeft() && state.Length - index > 2 && state[index + 1].IsEmpty();
+            return state[index].IsRight() && state.Length - index > 1 && state[index + 1].IsEmpty();
         }
 
         private bool JumpLeftMovePossible(int index, Frog[] state)
         {
-            return state[index].IsRight() && index > 1 && state[index - 2].IsEmpty();
+            return state[index].IsLeft() && index > 1 && state[index - 2].IsEmpty();
         }
 
         private bool DirectLeftMovePossible(int index, Frog[] state)
         {
-            return state[index].IsRight() && index > 0 && state[index - 1].IsEmpty();
+            return state[index].IsLeft() && index > 0 && state[index - 1].IsEmpty();
         }
     }
 }

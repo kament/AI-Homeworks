@@ -2,9 +2,9 @@
 {
     internal struct Frog
     {
-        private const char LeftFrogIndicator = '>';
-        private const char RightFrogIndicator = '<';
-        private const char EmptyFrogIndicator = ' ';
+        private const char LeftFrogIndicator = '<';
+        private const char RightFrogIndicator = '>';
+        private const char EmptyFrogIndicator = '_';
 
         private char frogSign;
 
