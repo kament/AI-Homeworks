@@ -12,7 +12,7 @@ namespace TicTacToe.GameEngine
 
         private static Position CalculateMax(PlayGround playGround)
         {
-            
+            throw new NotImplementedException();
         }
 
         private enum Outcome
