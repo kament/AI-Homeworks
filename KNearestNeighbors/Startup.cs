@@ -83,10 +83,11 @@ namespace KNearestNeighbors
 
         private static string TakeCommonClass(IEnumerable<Individual> individuals)
         {
-            string mostCommon = individuals.GroupBy(v => v.Class.Value)
-                            .OrderByDescending(g => g.Count())
-                            .Select(g => g.Key)
-                            .FirstOrDefault();
+            string mostCommon = individuals
+                .GroupBy(v => v.Class.Value)
+                .OrderByDescending(g => g.Count())
+                .Select(g => g.Key)
+                .FirstOrDefault();
 
             return mostCommon;
         }
