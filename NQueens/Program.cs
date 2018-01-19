@@ -8,6 +8,7 @@ namespace NQueensProblem
     class Program
     {
         private static int maxConflicts = 0;
+        private static int allSteps = 0;
 
         public static void Main(String[] args)
         {
@@ -15,7 +16,8 @@ namespace NQueensProblem
             int numberQueens = int.Parse(Console.ReadLine());
             int[] board = Solve(numberQueens);
             Print(board);
-        }
+            Console.WriteLine($"All steps: {allSteps}");
+            }
 
         private static int[] Solve(int numberQueens)
         {
@@ -31,12 +33,13 @@ namespace NQueensProblem
                     break;
                 }
                 queensArray[col] = GetRowWithMinConflict(col, queensArray, rand);
+                steps++;
             }
             if (FindConflicts())
             {
                 Solve(numberQueens);
             }
-
+            allSteps += steps;
             return queensArray;
         }
 
@@ -49,7 +52,7 @@ namespace NQueensProblem
                 {
                     if (j == queensArray[i])
                     {
-                        sb.Append("0 ");
+                        sb.Append("* ");
                     }
                     else
                     {
@@ -98,9 +101,6 @@ namespace NQueensProblem
                     conflictQueens.Add(currCol);
                     maxConflicts = conflicts;
                 }
-                else
-                {
-                }
             }
             return conflictQueens[rand.Next(conflictQueens.Count())];
         }
@@ -133,9 +133,6 @@ namespace NQueensProblem
                     conflictQueens = new List<int>();
                     conflictQueens.Add(currRow);
                     minConflicts = conflicts;
-                }
-                else
-                {
                 }
             }
             return conflictQueens[r.Next(conflictQueens.Count())];
