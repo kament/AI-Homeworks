@@ -58,12 +58,19 @@ namespace SlidingBlocks.Console
         {
             get
             {
-                int counter = 0;
+                int counter = 1;
                 for (int row = 0; row < this.playGround.Count; row++)
                 {
                     for (int col = 0; col < this.playGround.Count; col++)
                     {
-                        if (this.playGround[row][col] != counter)
+                        if(row == this.playGround.Count - 1 && col == this.playGround.Count - 1)
+                        {
+                            if(this.playGround[row][col] != 0)
+                            {
+                                return false;
+                            }
+                        }
+                        else if (this.playGround[row][col] != counter)
                         {
                             return false;
                         }

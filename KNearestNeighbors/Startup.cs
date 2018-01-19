@@ -9,7 +9,7 @@ namespace KNearestNeighbors
 {
     internal static class Startup
     {
-        private const int K = 7;
+        private const int K = 3;
         private const int TEST_SET_COUNT = 20;
 
         private static Random rand = new Random();
