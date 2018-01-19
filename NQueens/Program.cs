@@ -12,12 +12,12 @@ namespace NQueensProblem
 
         public static void Main(String[] args)
         {
-            Console.WriteLine("Enter number of queens: ");
+            Console.WriteLine("Enter queens count: ");
             int numberQueens = int.Parse(Console.ReadLine());
             int[] board = Solve(numberQueens);
             Print(board);
             Console.WriteLine($"All steps: {allSteps}");
-            }
+        }
 
         private static int[] Solve(int numberQueens)
         {
